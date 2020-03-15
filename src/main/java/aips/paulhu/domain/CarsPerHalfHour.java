@@ -5,10 +5,12 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import static aips.paulhu.utils.Constants.*;
+import java.time.format.DateTimeFormatter;
 
 public class CarsPerHalfHour {
+
+    private static final String TIMESTAMP_COUNT_SEPARATOR = " ";
+    private static final DateTimeFormatter ISO_8601 = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     private LocalDateTime timestamp;
     private int count;
