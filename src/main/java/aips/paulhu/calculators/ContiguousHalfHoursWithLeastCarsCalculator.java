@@ -37,7 +37,7 @@ public class ContiguousHalfHoursWithLeastCarsCalculator {
         if (recordsInTimeSequence.size() < this.contiguousHalfHours)
             return emptyList();
 
-        return totalCountsByContiguousTimeBlocks(recordsInTimeSequence).entrySet()
+        return totalCarCountsInContiguousTimeBlocks(recordsInTimeSequence).entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue())
                 .findFirst()
@@ -46,24 +46,22 @@ public class ContiguousHalfHoursWithLeastCarsCalculator {
     }
 
     /**
-     * Build lookup map of total car counts in contiguous half hours, which is indexed by contiguous half hours. The algorithm
-     * break down the inputs into blocks of half hours using 'sliding window', then filter out non-contiguous time blocks.
+     * Assuming fixed time interval (1.5 hrs), this problem is best solved by sliding window algorithm. There's an added
+     * complexity of possible missing record (as shown in the sample data), which can be solved by filter out any non-contiguous
+     * sliding window data.
      */
-    private Map<List<CarsPerHalfHour>, Integer> totalCountsByContiguousTimeBlocks(List<CarsPerHalfHour> recordsInTimeSequence) {
+    private Map<List<CarsPerHalfHour>, Integer> totalCarCountsInContiguousTimeBlocks(List<CarsPerHalfHour> recordsInTimeSequence) {
         return SlidingWindowStream
                 .stream(recordsInTimeSequence, this.contiguousHalfHours)
                 .filter(recordsInSlidingWindow -> isContiguousRecords(recordsInSlidingWindow))
-                .collect(Collectors.toMap(Function.identity(), recordsInSlidingWindow -> sumCounts(recordsInSlidingWindow)));
-    }
-
-    private int sumCounts(List<CarsPerHalfHour> recordsInSlidingWindow) {
-        return totalCarsCalculator.totalCarsIn(recordsInSlidingWindow);
+                .collect(Collectors.toMap(
+                        Function.identity(),
+                        recordsInSlidingWindow -> totalCarsCalculator.totalCarsIn(recordsInSlidingWindow)));
     }
 
     /**
-     * Break the records in sliding window into block of 2 and make sure each pair is contiguous in time.
-     * It seems the sample data file has time gaps, which is assumed to be caused by traffic counter temporarily offline.
-     * If there's guarantee the input file always have contiguous time records, then this check is not necessary.
+     * This can be either implemented as a 'looking ahead / back' for loop (if performance is a concern),
+     * OR sliding window of size 2 (if readability is a priority, assuming familiar with concept of sliding window)
      */
     private boolean isContiguousRecords(List<CarsPerHalfHour> recordsInSlidingWindow) {
         return SlidingWindowStream
