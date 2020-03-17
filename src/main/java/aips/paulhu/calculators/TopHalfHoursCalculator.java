@@ -10,10 +10,10 @@ import static org.apache.commons.lang3.Validate.notNull;
 
 public class TopHalfHoursCalculator {
 
-    private int topHalfHours;
+    private int timeBlockCount;
 
-    public TopHalfHoursCalculator(int topHalfHours) {
-        this.topHalfHours = topHalfHours;
+    public TopHalfHoursCalculator(int timeBlockCount) {
+        this.timeBlockCount = timeBlockCount;
     }
 
     public List<CarsPerHalfHour> topHalfHoursWithMostCarsIn(List<CarsPerHalfHour> inputs) {
@@ -22,7 +22,7 @@ public class TopHalfHoursCalculator {
         return inputs
                 .stream()
                 .sorted(Comparator.comparingInt(CarsPerHalfHour::getCount).reversed())
-                .limit(this.topHalfHours)
+                .limit(this.timeBlockCount)
                 .collect(Collectors.toList());
     }
 }

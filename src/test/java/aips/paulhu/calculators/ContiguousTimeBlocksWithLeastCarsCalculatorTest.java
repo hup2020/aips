@@ -9,13 +9,15 @@ import java.util.List;
 import static aips.paulhu.calculators.CalculatorTestSupport.dataRow;
 import static org.junit.jupiter.api.Assertions.*;
 
-class ContiguousHalfHoursWithLeastCarsCalculatorTest {
+class ContiguousTimeBlocksWithLeastCarsCalculatorTest {
 
-    private ContiguousHalfHoursWithLeastCarsCalculator unitUnderTest;
+    private static final int TIME_BLOCK_COUNT = 3;
+
+    private ContiguousTimeBlocksWithLeastCarsCalculator unitUnderTest;
 
     @Test
     void failWhenInputsIsNull() {
-        assertThrows(NullPointerException.class, () -> unitUnderTest.contiguousHalfHoursWithLeastCarsIn(null));
+        assertThrows(NullPointerException.class, () -> unitUnderTest.contiguousTimeBlocksWithLeastCarsIn(null));
     }
 
     @Test
@@ -27,7 +29,7 @@ class ContiguousHalfHoursWithLeastCarsCalculatorTest {
                 dataRow("2016-12-01T06:30:00", 1),
                 dataRow("2016-12-01T07:00:00", 2));
 
-        List<CarsPerHalfHour> results = unitUnderTest.contiguousHalfHoursWithLeastCarsIn(inputs);
+        List<CarsPerHalfHour> results = unitUnderTest.contiguousTimeBlocksWithLeastCarsIn(inputs);
 
         assertEquals(3, results.size());
 
@@ -42,7 +44,7 @@ class ContiguousHalfHoursWithLeastCarsCalculatorTest {
                 dataRow("2016-12-01T05:00:00", 2),
                 dataRow("2016-12-01T05:30:00", 1));
 
-        List<CarsPerHalfHour> results = unitUnderTest.contiguousHalfHoursWithLeastCarsIn(inputs);
+        List<CarsPerHalfHour> results = unitUnderTest.contiguousTimeBlocksWithLeastCarsIn(inputs);
 
         assertTrue(results.isEmpty());
     }
@@ -55,7 +57,7 @@ class ContiguousHalfHoursWithLeastCarsCalculatorTest {
                 dataRow("2016-12-02T06:00:00", 1),
                 dataRow("2016-12-02T06:30:00", 1));
 
-        List<CarsPerHalfHour> results = unitUnderTest.contiguousHalfHoursWithLeastCarsIn(inputs);
+        List<CarsPerHalfHour> results = unitUnderTest.contiguousTimeBlocksWithLeastCarsIn(inputs);
 
         assertTrue(results.isEmpty());
     }
@@ -70,7 +72,7 @@ class ContiguousHalfHoursWithLeastCarsCalculatorTest {
                 dataRow("2016-12-01T07:00:00", 4),
                 dataRow("2016-12-02T05:00:00", 1)); // not qualified as there's a time gap
 
-        List<CarsPerHalfHour> results = unitUnderTest.contiguousHalfHoursWithLeastCarsIn(inputs);
+        List<CarsPerHalfHour> results = unitUnderTest.contiguousTimeBlocksWithLeastCarsIn(inputs);
 
         assertEquals(3, results.size());
 
@@ -81,6 +83,6 @@ class ContiguousHalfHoursWithLeastCarsCalculatorTest {
 
     @BeforeEach
     void init() {
-        unitUnderTest = new ContiguousHalfHoursWithLeastCarsCalculator(3);
+        unitUnderTest = new ContiguousTimeBlocksWithLeastCarsCalculator(TIME_BLOCK_COUNT);
     }
 }

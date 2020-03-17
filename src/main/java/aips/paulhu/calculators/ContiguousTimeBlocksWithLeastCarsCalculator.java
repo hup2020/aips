@@ -11,30 +11,34 @@ import java.util.stream.Collectors;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.lang3.Validate.notNull;
 
-public class ContiguousHalfHoursWithLeastCarsCalculator {
+public class ContiguousTimeBlocksWithLeastCarsCalculator {
 
-    private int contiguousHalfHours;
+    private int halfHourTimeBlocks;
     private TotalCarsCalculator totalCarsCalculator;
 
-    public ContiguousHalfHoursWithLeastCarsCalculator(int contiguousHalfHours) {
-        this.contiguousHalfHours = contiguousHalfHours;
+    /**
+     * Calculator that computes contiguous half hour time blocks with least car counts during the period.
+     *
+     * @param halfHourTimeBlocks half hour time blocks (e.g. 3 means 1.5 hrs)
+     */
+    public ContiguousTimeBlocksWithLeastCarsCalculator(int halfHourTimeBlocks) {
+        this.halfHourTimeBlocks = halfHourTimeBlocks;
         this.totalCarsCalculator = new TotalCarsCalculator();
     }
 
     /**
-     * Returns contiguous half hour blocks with least car counts. For example, if contiguousHalfHours is 3, then this
-     * method will find 1.5 contiguous hours with least car counts.
+     * Returns contiguous time blocks with least car counts.
      *
-     * If there is no contiguous half hour blocks, it will return an empty list.
-     * If there are multiple contiguous half hour blocks with same car counts, it will return earliest time block.
+     * If there is no contiguous time blocks, it will return an empty list.
+     * If there are multiple contiguous time blocks with same car counts, it will return earliest time block.
      *
      * @param recordsInTimeSequence a list of {@link CarsPerHalfHour} in time sequence
      * @return contiguous half hour block with least total car count
      */
-    public List<CarsPerHalfHour> contiguousHalfHoursWithLeastCarsIn(List<CarsPerHalfHour> recordsInTimeSequence) {
+    public List<CarsPerHalfHour> contiguousTimeBlocksWithLeastCarsIn(List<CarsPerHalfHour> recordsInTimeSequence) {
         notNull(recordsInTimeSequence, "recordsInTimeSequence cannot be null");
 
-        if (recordsInTimeSequence.size() < this.contiguousHalfHours)
+        if (recordsInTimeSequence.size() < this.halfHourTimeBlocks)
             return emptyList();
 
         return totalCarCountsInContiguousTimeBlocks(recordsInTimeSequence).entrySet()
@@ -52,7 +56,7 @@ public class ContiguousHalfHoursWithLeastCarsCalculator {
      */
     private Map<List<CarsPerHalfHour>, Integer> totalCarCountsInContiguousTimeBlocks(List<CarsPerHalfHour> recordsInTimeSequence) {
         return SlidingWindowStream
-                .stream(recordsInTimeSequence, this.contiguousHalfHours)
+                .stream(recordsInTimeSequence, this.halfHourTimeBlocks)
                 .filter(recordsInSlidingWindow -> isContiguousRecords(recordsInSlidingWindow))
                 .collect(Collectors.toMap(
                         Function.identity(),

@@ -1,7 +1,7 @@
 package aips.paulhu;
 
 import aips.paulhu.calculators.CarsPerDayCalculator;
-import aips.paulhu.calculators.ContiguousHalfHoursWithLeastCarsCalculator;
+import aips.paulhu.calculators.ContiguousTimeBlocksWithLeastCarsCalculator;
 import aips.paulhu.calculators.TopHalfHoursCalculator;
 import aips.paulhu.calculators.TotalCarsCalculator;
 import aips.paulhu.domain.CarsPerHalfHour;
@@ -16,13 +16,13 @@ public class TrafficReportApplication {
     private TotalCarsCalculator totalCarsCalculator;
     private CarsPerDayCalculator carsPerDayCalculator;
     private TopHalfHoursCalculator topThreeHalfHoursCalculator;
-    private ContiguousHalfHoursWithLeastCarsCalculator leastCarsInOneHourAndHalfCalculator;
+    private ContiguousTimeBlocksWithLeastCarsCalculator leastCarsInOneHourAndHalfCalculator;
 
     public TrafficReportApplication() {
         this.totalCarsCalculator = new TotalCarsCalculator();
         this.carsPerDayCalculator = new CarsPerDayCalculator();
         this.topThreeHalfHoursCalculator = new TopHalfHoursCalculator(3);
-        this.leastCarsInOneHourAndHalfCalculator = new ContiguousHalfHoursWithLeastCarsCalculator(3);
+        this.leastCarsInOneHourAndHalfCalculator = new ContiguousTimeBlocksWithLeastCarsCalculator(3);
     }
 
     private void printReportFor(List<CarsPerHalfHour> inputs) {
@@ -35,7 +35,7 @@ public class TrafficReportApplication {
         printResults(topThreeHalfHoursCalculator.topHalfHoursWithMostCarsIn(inputs));
 
         System.out.println("\n1.5 hours with least cars:");
-        printResults(leastCarsInOneHourAndHalfCalculator.contiguousHalfHoursWithLeastCarsIn(inputs));
+        printResults(leastCarsInOneHourAndHalfCalculator.contiguousTimeBlocksWithLeastCarsIn(inputs));
     }
 
 
